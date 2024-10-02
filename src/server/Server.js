@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
 const { v4: uuidv4 } = require('uuid');
+require('dotenv').config(); // Load environment variables
 
 const app = express();
 app.use(express.json());
@@ -17,8 +18,8 @@ app.use((req, res, next) => {
     next();
 });
 
-// Connect to MongoDB Atlas for both attendance and officer management
-mongoose.connect('mongodb+srv://Cats1224:Cats1224@blyn.imjii.mongodb.net/attendance?retryWrites=true&w=majority&appName=Blyn', {
+// Connect to MongoDB Atlas using the environment variable
+mongoose.connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 }).then(() => {
