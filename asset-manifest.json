@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/attendance-system-jpcs/static/css/main.dce14189.css",
-    "main.js": "/attendance-system-jpcs/static/js/main.30909bec.js",
+    "main.js": "/attendance-system-jpcs/static/js/main.725ebef4.js",
     "static/js/453.50d6bbc2.chunk.js": "/attendance-system-jpcs/static/js/453.50d6bbc2.chunk.js",
     "index.html": "/attendance-system-jpcs/index.html",
     "main.dce14189.css.map": "/attendance-system-jpcs/static/css/main.dce14189.css.map",
-    "main.30909bec.js.map": "/attendance-system-jpcs/static/js/main.30909bec.js.map",
+    "main.725ebef4.js.map": "/attendance-system-jpcs/static/js/main.725ebef4.js.map",
     "453.50d6bbc2.chunk.js.map": "/attendance-system-jpcs/static/js/453.50d6bbc2.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.dce14189.css",
-    "static/js/main.30909bec.js"
+    "static/js/main.725ebef4.js"
   ]
 }
