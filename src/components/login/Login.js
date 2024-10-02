@@ -9,7 +9,8 @@ const Login = () => {
 
   const onFinish = async (values) => {
     try {
-      const response = await axios.post('http://localhost:5000/login', values);
+      // Update this URL to your backend login URL
+      const response = await axios.post('https://blyn04.github.io/login', values);
       console.log('Login Success:', response.data);
       // Save JWT to local storage or state
       localStorage.setItem('token', response.data.token);
