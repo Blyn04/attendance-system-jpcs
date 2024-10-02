@@ -1,10 +1,13 @@
+require('dotenv').config(); // Load environment variables
+
 const express = require('express');
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
 const { v4: uuidv4 } = require('uuid');
-require('dotenv').config(); // Load environment variables
+
+console.log('MONGODB_URI:', process.env.MONGODB_URI);
 
 const app = express();
 app.use(express.json());
