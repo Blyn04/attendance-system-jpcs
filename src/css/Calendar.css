@@ -1,0 +1,45 @@
+.calendar-container {
+  width: 100%;
+  max-width: 100%; /* Make sure it doesn't overflow */
+  margin: 20px auto;
+  padding: 0 10px; /* Add some padding for breathing room */
+  box-sizing: border-box; /* Ensure padding doesn't affect width */
+}
+
+.events {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.events li {
+  margin-bottom: 5px;
+}
+
+.ant-badge-status {
+  font-size: 12px;
+}
+
+/* Make the calendar responsive */
+.ant-picker-calendar {
+  width: 100%; /* Ensure the calendar takes full width */
+}
+
+.ant-picker-panel {
+  width: 100%;
+  max-width: 100%;
+}
+
+@media screen and (max-width: 768px) {
+  .calendar-container {
+      padding: 0 5px;
+  }
+
+  .ant-picker-calendar {
+      font-size: 12px; /* Make text smaller for mobile */
+  }
+
+  .ant-picker-panel {
+      padding: 5px;
+  }
+}

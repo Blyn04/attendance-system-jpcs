@@ -1,0 +1,23 @@
+.attendance-container {
+    padding: 20px;
+    width: 100%;
+}
+
+.date-picker-container {
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+.attendance-container.light {
+    background-color: #ffffff;
+    color: #000000;
+}
+
+.attendance-container.dark {
+    background-color: #333333;
+    color: #ffffff;
+}
+
+.student-input {
+    width: 300px; /* Set your desired width */
+}
