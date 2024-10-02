@@ -12,8 +12,9 @@ console.log('MONGODB_URI:', process.env.MONGODB_URI);
 const app = express();
 app.use(express.json());
 app.use(cors({
-    origin: 'http://localhost:3000',
+    origin: ['http://localhost:3000', 'https://blyn04.github.io/attendance-system-jpcs/'], // Add your GitHub Pages URL here
 }));
+
 
 // Logging middleware
 app.use((req, res, next) => {
