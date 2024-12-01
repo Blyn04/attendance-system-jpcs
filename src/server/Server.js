@@ -1,4 +1,4 @@
-require('dotenv').config(); // Load environment variablesno
+require('dotenv').config(); // Load environment variables
 
 const express = require('express');
 const mongoose = require('mongoose');
@@ -13,11 +13,9 @@ const app = express();
 app.use(express.json());
 app.use(cors({
     origin: ['http://localhost:3000', 'https://blyn04.github.io'],
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Include allowed methods if needed
-    credentials: true, // Include credentials if necessary (for cookies, etc.)
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    credentials: true,
 }));
-
-
 
 // Logging middleware
 app.use((req, res, next) => {
@@ -47,7 +45,7 @@ const User = mongoose.model('User', UserSchema);
 const OfficerSchema = new mongoose.Schema({
     name: { type: String, required: true },
     position: { type: String, required: true },
-    present: { type: Boolean, default: false }, // Default to false (not present)
+    present: { type: Boolean, default: false },
 });
 
 const Officer = mongoose.model('Officer', OfficerSchema);
@@ -60,6 +58,136 @@ const StudentSchema = new mongoose.Schema({
 });
 
 const Student = mongoose.model('Student', StudentSchema);
+
+// Updated Event schema and model
+const EventSchema = new mongoose.Schema({
+    title: { type: String, required: true },
+    description: { type: String },
+    date: { type: Date, required: true },
+    location: { type: String },
+    students: [
+        {
+            studentId: { type: mongoose.Schema.Types.ObjectId, ref: 'Student' },
+            name: { type: String },
+            present: { type: Boolean, default: false },
+        },
+    ],
+});
+
+const Event = mongoose.model('Event', EventSchema);
+
+app.post('/main/events', async (req, res) => {
+    const { title, description, date, location, students } = req.body;
+
+    try {
+        const event = new Event({ title, description, date, location, students });
+        await event.save();
+        res.status(201).json(event);
+    } catch (err) {
+        console.error('Error creating event:', err.message);
+        res.status(500).json({ message: 'Failed to create event' });
+    }
+});
+
+app.post('/main/events/:id/students', async (req, res) => {
+    const { studentId, name, present } = req.body;
+
+    try {
+        const event = await Event.findById(req.params.id);
+        if (!event) {
+            return res.status(404).json({ message: 'Event not found' });
+        }
+
+        event.students.push({ studentId, name, present });
+        await event.save();
+        res.status(201).json(event);
+    } catch (err) {
+        console.error('Error adding student to event:', err.message);
+        res.status(500).json({ message: 'Failed to add student to event' });
+    }
+});
+
+
+app.put('/main/events/:eventId/students/:studentId', async (req, res) => {
+    const { present } = req.body;
+
+    try {
+        const event = await Event.findById(req.params.eventId);
+        if (!event) {
+            return res.status(404).json({ message: 'Event not found' });
+        }
+
+        const student = event.students.find((s) => s.studentId.toString() === req.params.studentId);
+        if (!student) {
+            return res.status(404).json({ message: 'Student not found in event' });
+        }
+
+        student.present = present;
+        await event.save();
+        res.json(event);
+    } catch (err) {
+        console.error('Error updating student attendance:', err.message);
+        res.status(500).json({ message: 'Failed to update student attendance' });
+    }
+});
+
+app.get('/main/events/:id', async (req, res) => {
+    try {
+        const event = await Event.findById(req.params.id).populate('students.studentId');
+        if (!event) {
+            return res.status(404).json({ message: 'Event not found' });
+        }
+        res.json(event);
+    } catch (err) {
+        console.error('Error fetching event:', err.message);
+        res.status(500).json({ message: 'Failed to fetch event' });
+    }
+});
+
+app.delete('/main/events/:eventId/students/:studentId', async (req, res) => {
+    try {
+        const event = await Event.findById(req.params.eventId);
+        if (!event) {
+            return res.status(404).json({ message: 'Event not found' });
+        }
+
+        event.students = event.students.filter((s) => s.studentId.toString() !== req.params.studentId);
+        await event.save();
+        res.status(204).send();
+    } catch (err) {
+        console.error('Error removing student from event:', err.message);
+        res.status(500).json({ message: 'Failed to remove student from event' });
+    }
+});
+
+app.get('/main/events', async (req, res) => {
+    try {
+      const events = await Event.find();
+      const formattedEvents = events.map((event) => ({
+        _id: event._id,
+        title: event.title,
+        description: event.description,
+        date: event.date.toISOString().split('T')[0], // Format date to YYYY-MM-DD
+        students: event.students,
+      }));
+      res.json(formattedEvents);
+    } catch (error) {
+      console.error('Error fetching events:', error);
+      res.status(500).json({ error: 'Failed to fetch events' });
+    }
+  });
+
+  app.get('/main/students/:date', async (req, res) => {
+    try {
+      const eventDate = new Date(req.params.date);
+      const students = await Student.find(); // Fetch all students
+      res.json(students);
+    } catch (error) {
+      console.error('Error fetching students:', error);
+      res.status(500).json({ error: 'Failed to fetch students' });
+    }
+  });
+  
 
 // Login route
 app.post('/login', async (req, res) => {
@@ -127,6 +255,7 @@ app.put('/main/jpcs-officers/:id', async (req, res) => {
     }
 });
 
+
 // Delete officer route
 app.delete('/main/jpcs-officers/:id', async (req, res) => {
     try {
@@ -142,7 +271,6 @@ app.delete('/main/jpcs-officers/:id', async (req, res) => {
 });
 
 // CRUD operations for Students
-
 // Add student route
 app.post('/main/attendance', async (req, res) => {
     const { name, section, customId } = req.body;
@@ -162,10 +290,12 @@ app.post('/main/attendance', async (req, res) => {
     }
 });
 
-// Get all students route
+// Get all students route (updated to filter by section)
 app.get('/main/attendance', async (req, res) => {
+    const { section } = req.query; // Get the section from query parameters
     try {
-        const students = await Student.find();
+        const query = section ? { section } : {}; // Create a query object
+        const students = await Student.find(query); // Fetch students based on the query
         res.json(students);
     } catch (err) {
         console.error('Error fetching students:', err);

@@ -5,6 +5,7 @@ import { Button, Layout, Menu, theme } from 'antd';
 import CalendarComponent from './calendar/CalendarComponent';
 import Attendance from './tablecomponents/Attendance';
 import OfficerAttendance from './attendance-jpcs/OfficerAttendance';
+import AttendanceTest from './tabletest/AttendanceTest';
 
 const { Header, Sider, Content } = Layout;
 
@@ -127,7 +128,7 @@ function OfficerContent() {
             background: colorBgContainer,
             borderRadius: borderRadiusLG,
         }}>
-            <OfficerAttendance/>
+            <AttendanceTest/>
         </div>
     );
 }
@@ -157,7 +158,7 @@ function AttendanceContent() {
             background: colorBgContainer,
             borderRadius: borderRadiusLG,
         }}>
-            <Attendance />
+            <Attendance/>
         </div>
     );
 }
