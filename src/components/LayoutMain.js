@@ -15,9 +15,8 @@ const LayoutMain = () => {
     const navigate = useNavigate();
 
     const handleSignOut = () => {
-        // Clear authentication state (if applicable)
-        localStorage.removeItem('authToken'); // Adjust according to your auth method
-        navigate('/login'); // Navigate to login page
+        localStorage.removeItem('authToken'); 
+        navigate('/login'); 
     };
 
     return (
@@ -117,7 +116,6 @@ const LayoutMain = () => {
     );
 };
 
-// Content components remain unchanged
 function OfficerContent() {
     const { token: { colorBgContainer, borderRadiusLG } } = theme.useToken();
     return (
